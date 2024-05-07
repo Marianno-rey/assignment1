@@ -9,7 +9,6 @@ if torch.cuda.is_available():
     print(f"GPU Name: {torch.cuda.get_device_name(0)}")
     print(f"GPU Capability: {torch.cuda.get_device_capability(0)}")
 
-# Load the pre-trained GPT-2 (Small) model and tokenizer
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
@@ -20,15 +19,12 @@ dataset = TextDataset(
     block_size=128,
 )
 
-# Split the dataset into train and validation sets
 train_size = int(0.8 * len(dataset))
 val_size = len(dataset) - train_size
 train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
 
-# Create data collator
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
-# Define training arguments
 output_dir = "gpt2-small-finetuned"
 training_args = TrainingArguments(
     output_dir=output_dir,
@@ -42,7 +38,6 @@ training_args = TrainingArguments(
     prediction_loss_only=True,
 )
 
-# Create the trainer
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -51,8 +46,6 @@ trainer = Trainer(
     eval_dataset=val_dataset,
 )
 
-# Fine-tune the model
 trainer.train()
 
-# Save the fine-tuned model
 trainer.save_model(output_dir)
