@@ -1,0 +1,1 @@
+The requirements are all in the venv file. The script runs just by clicking run or invoking the executable at the command line. 
